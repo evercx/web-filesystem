@@ -7,5 +7,5 @@ node_modules/
 jspm_packages/
 
 # others
-.idea/
+/.idea/
 .DS_Store
