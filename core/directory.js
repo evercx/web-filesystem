@@ -34,11 +34,13 @@ module.exports = {
                 }
 
             }catch (e) {
-                return {msg:e,dirInfo:[]}
+                throw e
+                // return {msg:e,dirInfo:[]}
             }
             return {msg:"success",dirInfo:dirInfo}
         }else {
-            return {msg:"dir not exists",dirInfo:[]}
+            throw new Error('dir does not exists')
+            //return {msg:"dir not exists",dirInfo:[]}
         }
     },
 

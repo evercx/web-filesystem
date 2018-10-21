@@ -42,9 +42,12 @@ module.exports = {
         curDirPath = tools.safeDecodeURIComponent(curDirPath)
 
         let absDirPath = tools.getAbsPath(curDirPath)
-        let InfoResult = await showDirInfo(absDirPath)
-
-        ctx.body = InfoResult.dirInfo
+        try{
+            let InfoResult = await showDirInfo(absDirPath)
+            ctx.body = InfoResult.dirInfo
+        }catch (e) {
+            ctx.throw(404)
+        }
         return
     },
 
