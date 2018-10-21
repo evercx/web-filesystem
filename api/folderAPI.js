@@ -1,5 +1,8 @@
+const fs = require('fs')
+const contentDisposition = require('content-disposition')
 const tools = require('../lib/tools')
-const { mkFolder,delFolder,showDirInfo } = require('../core/directory')
+const {storageFolder} = require('../storage.js')
+const { mkFolder,delFolder,showDirInfo,archiveFolder } = require('../core/directory')
 
 
 module.exports = {
@@ -14,15 +17,10 @@ module.exports = {
         ctx.body = await mkFolder(targetAbsDirPath,folderName)
         return
     },
+
     deleteFolder : async (ctx,next) => {
 
-        let url = ctx.request.url
-        let folderIndex = url.indexOf('folder/')
-        let folderPath = url.substring(folderIndex + 7)
-
-        if(folderPath.indexOf("?") !== -1){
-            folderPath = folderPath.split("?")[0]
-        }
+        let folderPath = ctx.params['0']
 
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
@@ -48,5 +46,43 @@ module.exports = {
 
         ctx.body = InfoResult.dirInfo
         return
-    }
+    },
+
+    archFolder : async (ctx,next) => {
+
+        let folderPath = ctx.params['0']
+        folderPath = tools.formatPath(folderPath)
+        folderPath = tools.safeDecodeURIComponent(folderPath)
+
+        folderPath = folderPath.substring(0,folderPath.length-1)    //去掉最后一个 /
+
+        let index = folderPath.lastIndexOf('/')
+        let relFolderPath = folderPath.substring(0,index+1)
+        relFolderPath === '' ? relFolderPath = './' : relFolderPath
+        let folderName = folderPath.substring(index+1,folderPath.length)
+
+        let zipName = folderName + '.zip'
+        let relZipFolderPath = ''
+        let absFolderPath = ''
+
+        // 如果当前目录是根目录
+        if( relFolderPath === './' && folderName === '.'){
+            folderName = storageFolder
+            absFolderPath = tools.getAbsPath(relFolderPath)
+            relZipFolderPath = relFolderPath + storageFolder + '.zip'
+
+        }else {
+            absFolderPath = tools.getAbsPath(relFolderPath + folderName)
+            relZipFolderPath = relFolderPath + zipName
+        }
+        let absZipFolderPath = tools.getAbsPath(relZipFolderPath)
+
+        await archiveFolder(absFolderPath,folderName,absZipFolderPath)
+        let header = {}
+        header['Content-Disposition'] = contentDisposition(zipName)
+        ctx.set(header)
+        ctx.body = fs.createReadStream(absZipFolderPath)
+
+        return
+    },
 }

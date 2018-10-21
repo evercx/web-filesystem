@@ -1,19 +1,13 @@
 const multiparty = require('multiparty')
+const contentDisposition = require('content-disposition')
 const tools = require('../lib/tools')
-const { delOneFile } = require('../core/file')
-const StringDecoder = require('string_decoder').StringDecoder
+const { delOneFile,getFileStream,uploadFileStream } = require('../core/file')
 
 module.exports = {
 
     deleteFile : async (ctx,next) => {
 
-        let url = ctx.request.url
-        let fileIndex = url.indexOf('file/')
-        let filePath = url.substring(fileIndex + 5)
-
-        if(filePath.indexOf("?") !== -1){
-            filePath = filePath.split("?")[0]
-        }
+        let filePath = ctx.params['0']
 
         filePath = tools.formatPath(filePath)
         filePath = tools.safeDecodeURIComponent(filePath)
@@ -24,47 +18,53 @@ module.exports = {
 
         let fileAbsPath = tools.getAbsPath(filePath)
         ctx.body = await delOneFile(fileAbsPath)
-
         return
     },
 
 
     uploadFileStream: async (ctx,next) => {
 
-        let form = new multiparty.Form()
+        let uploadPath = tools.safeDecodeURIComponent(ctx.params['0'])
 
-        form.on('error', function(err) {
-            console.log('Error parsing form: ' + err.stack);
-        });
+        try{
+            await uploadFileStream(ctx.req,uploadPath)
+            ctx.body = {msg:"上传成功"}
+        }catch (e) {
+            ctx.status = 500
+        }
+    },
 
-        form.on('part',function(part){
+    downloadFile : async (ctx,next) => {
 
-            if(part.name){
-                console.log("part.name",part.name)
-            }
-            if(part.filename){
-                console.log("part.filename",part.filename)
-            }
+        let filePath = ctx.params['0']
 
-        })
+        filePath = tools.formatPath(filePath)
+        filePath = tools.safeDecodeURIComponent(filePath)
 
-        form.on('file',function(name,file){
-            console.log("name",name)
-            console.log("file",file)
-        })
+        if(filePath === '/') {
+            ctx.status = 404
+            return
+        }
 
+        if (filePath.lastIndexOf('.') === -1) return 404
 
+        try{
 
+            let fileAbsPath = tools.getAbsPath(filePath)
+            let readStream = await getFileStream(fileAbsPath)
+            let header = {}
+            let fileName = fileAbsPath.substring(fileAbsPath.lastIndexOf('/') + 1)
 
+            header['Content-Disposition'] = contentDisposition(fileName)
+            ctx.set(header)
+            ctx.body = readStream
+            return
 
-        form.parse(ctx.req)
-        ctx.body = {msg:"上传测试中"}
-
-
-
-
-
-
+        }catch (e) {
+            console.log(e)
+            ctx.status = 404
+            return
+        }
     }
 
 

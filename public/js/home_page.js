@@ -106,12 +106,13 @@ $(function(){
     $("#uploadFileBtn").click(function(){
         let c = confirm("Sure?")
         if(c){
-            var formData = new FormData($("#fileinfo")[0]);
-            let currentPath = getUrlRelativePath()
-            formData.append('currentPath',currentPath)
+
+            let formData = new FormData($("#fileinfo")[0]);
+            let currentPath = encodeURIComponent(getUrlRelativePath())
+            let url = '/api/upload/' + currentPath
+
             $.ajax({
-                url: "/api/upload",
-                // url: "/api/file",
+                url: url,
                 type: "POST",
                 data: formData,
                 contentType:false,
@@ -147,6 +148,22 @@ $(function(){
             });
 
         }
+    })
+
+
+    $("#downloadDirBtn").click(function(){
+
+        let currentPath = getUrlRelativePath()
+        console.log(currentPath)
+
+        let url = '/api/archive/' + encodeURIComponent(currentPath)
+
+        // $.ajax({
+        //     url:url,
+        //     method:"GET"
+        // })
+        window.location.href = url
+
     })
 
 

@@ -16,12 +16,12 @@ onerror(app)
 // middlewares
 // app.use(koaBody({}))
 
-app.use(koaBody({
-    multipart:true,
-    formidable: {
-        maxFileSize: 5000*1024*1024	// 设置上传文件大小最大限制，默认50M
-    }
-}));
+// app.use(koaBody({
+//     multipart:true,
+//     formidable: {
+//         maxFileSize: 5000*1024*1024	// 设置上传文件大小最大限制，默认50M
+//     }
+// }));
 
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))

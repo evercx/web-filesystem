@@ -1,11 +1,10 @@
 const path = require('path')
+const fs = require('fs')
+const archiver = require('archiver')
 const fsPromise = require('../lib/fsPromise')
 const tools = require('../lib/tools')
 const { pathIsExist } = require('../lib/tools')
-const {storagePath} = require('../lib/config')
-
-// const USER_HOME = process.env.HOME || process.env.USERPROFILE
-// const storagePath = path.resolve(USER_HOME,'storage')
+const {storagePath} = require('../storage.js')
 
 
 module.exports = {
@@ -22,8 +21,6 @@ module.exports = {
                 dirReadResult = await fsPromise.readdir(absDirPath)
 
                 for (item of dirReadResult) {
-
-                    if (item === '.DS_Store') continue;
 
                     let itemInfo = {}
                     let itemPath = path.resolve(absDirPath,item)
@@ -83,6 +80,46 @@ module.exports = {
             console.log("delOneFolder",e)
             return {msg:"文件夹删除失败",path:folderAbsPath}
         }
+    },
+
+    archiveFolder:async (absFolderPath,folderName,absZipFolderPath) => {
+
+        let outputStream = fs.createWriteStream(absZipFolderPath)
+
+        let archive = archiver('zip',{ zlib:{level:9} })
+        archive.directory(absFolderPath,folderName)
+
+        archive.pipe(outputStream)
+        archive.finalize();
+
+        return new Promise(function(resolve,reject){
+
+            outputStream.on('close',function(){
+                console.log(archive.pointer() + ' total bytes')
+                return resolve("success")
+            })
+
+            outputStream.on('end',function(){
+                console.log('Data has been drained');
+            })
+
+            archive.on('warning',function(err){
+                if (err.code === 'ENOENT') {
+                    console.log(err)
+                    return reject(err)
+                    // log warning
+                } else {
+                    return reject(err)
+                    // throw error
+                    // throw err;
+                }
+            })
+
+            archive.on('error', function(err) {
+                // throw err;
+                return reject(err)
+            });
+        })
     }
 }
 
@@ -120,6 +157,8 @@ let recEmptyFolder = async(absDirPath) => {
 // module.exports.delFolder('/Users/evercx/storage','t').then( r => console.log(r))
 
 // recEmptyFolder('/Users/evercx/storage/t').then( c => console.log(c))
+
+// module.exports.archiveFolder('/Users/evercx/Teambition-Internship/web-filesystem/storage/')
 
 
 
