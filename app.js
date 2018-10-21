@@ -1,0 +1,33 @@
+const Koa = require('koa')
+const app = new Koa()
+const path = require('path')
+
+const onerror = require('koa-onerror')
+const logger = require('koa-logger')
+const koaBody = require('koa-body');
+
+const fsPromise = require('./lib/fsPromise.js')
+const index = require('./routes/index')
+const api = require('./routes/apis')
+
+// error handler
+onerror(app)
+
+// middlewares
+// app.use(koaBody({}))
+
+app.use(koaBody({
+    multipart:true,
+    formidable: {
+        maxFileSize: 5000*1024*1024	// 设置上传文件大小最大限制，默认50M
+    }
+}));
+
+app.use(logger())
+app.use(require('koa-static')(__dirname + '/public'))
+
+
+// routes
+app.use(api.routes(), api.allowedMethods())
+app.use(index.routes(), index.allowedMethods())
+module.exports = app
