@@ -11,7 +11,7 @@ module.exports = {
 
     getFileStream: async (absFilePath) => {
 
-        let isExist = pathIsExist(absFilePath)
+        let isExist = await pathIsExist(absFilePath)
 
         if(isExist){
 
@@ -25,7 +25,7 @@ module.exports = {
     delOneFile: async (fileAbsPath) => {
 
         // let fileAbsPath = path.resolve(targetAbsDirPath,fileName)
-        let isExist = pathIsExist(fileAbsPath)
+        let isExist = await pathIsExist(fileAbsPath)
 
         if(!fileAbsPath.startsWith(storagePath)){
             // return {msg:"文件地址不合法",path:fileAbsPath}

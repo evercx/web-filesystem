@@ -1,5 +1,4 @@
 const router = require('koa-router')()
-// const { uploadFile } = require('../api/uploadFile')
 const { makeOneFolder,deleteFolder,getFolderInfo,archFolder } = require('../api/folderAPI')
 const { deleteFile,uploadFileStream,downloadFile } = require('../api/fileAPI')
 

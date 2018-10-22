@@ -1,5 +1,6 @@
 const fs = require('fs')
 const contentDisposition = require('content-disposition')
+const path = require('path')
 const tools = require('../lib/tools')
 const {storageFolder} = require('../storage.js')
 const { mkFolder,delFolder,showDirInfo,archiveFolder } = require('../core/directory')
@@ -62,33 +63,62 @@ module.exports = {
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
 
-        folderPath = folderPath.substring(0,folderPath.length-1)    //去掉最后一个 /
-
-        let index = folderPath.lastIndexOf('/')
-        let relFolderPath = folderPath.substring(0,index+1)
-        relFolderPath === '' ? relFolderPath = './' : relFolderPath
-        let folderName = folderPath.substring(index+1,folderPath.length)
-
-        let zipName = folderName + '.zip'
-        let relZipFolderPath = ''
         let absFolderPath = ''
+        let folderName = ''
+        let absZipFolderPath = ''
+        let zipFolderName = ''
 
-        // 如果当前目录是根目录
-        if( relFolderPath === './' && folderName === '.'){
-            folderName = storageFolder
-            absFolderPath = tools.getAbsPath(relFolderPath)
-            relZipFolderPath = relFolderPath + storageFolder + '.zip'
+        if (folderPath !== './'){
+
+            let folderPathSplit = folderPath.split('/')
+            let folderNameIndex = folderPathSplit.length - 2
+            folderName = folderPathSplit[folderNameIndex]
+            zipFolderName = folderName + '.zip'
+            let relSavedPath = './'
+            for(let i =0; i < folderNameIndex;i++){
+                relSavedPath = relSavedPath + folderPathSplit[i] + '/'
+            }
+            absZipFolderPath = tools.getAbsPath(relSavedPath + zipFolderName)
+            absFolderPath = tools.getAbsPath(folderPath)
 
         }else {
-            absFolderPath = tools.getAbsPath(relFolderPath + folderName)
-            relZipFolderPath = relFolderPath + zipName
+            absFolderPath = tools.getAbsPath(folderPath)
+            folderName = storageFolder
+            zipFolderName = folderName + '.zip'
+            absZipFolderPath = tools.getAbsPath(folderPath + zipFolderName)
         }
-        let absZipFolderPath = tools.getAbsPath(relZipFolderPath)
+
+        // console.log({absFolderPath,absZipFolderPath,folderName})
+
+
+
+        // folderPath = folderPath.substring(0,folderPath.length-1)    //去掉最后一个 /
+        //
+        // let index = folderPath.lastIndexOf('/')
+        // let relFolderPath = folderPath.substring(0,index+1)
+        // relFolderPath === '' ? relFolderPath = './' : relFolderPath
+        // let folderName = folderPath.substring(index+1,folderPath.length)
+        //
+        // let zipName = folderName + '.zip'
+        // let relZipFolderPath = ''
+        // let absFolderPath = ''
+        //
+        // // 如果当前目录是根目录
+        // if( relFolderPath === './' && folderName === '.'){
+        //     folderName = storageFolder
+        //     absFolderPath = tools.getAbsPath(relFolderPath)
+        //     relZipFolderPath = relFolderPath + storageFolder + '.zip'
+        //
+        // }else {
+        //     absFolderPath = tools.getAbsPath(relFolderPath + folderName)
+        //     relZipFolderPath = relFolderPath + zipName
+        // }
+        // let absZipFolderPath = tools.getAbsPath(relZipFolderPath)
 
         try{
             await archiveFolder(absFolderPath,folderName,absZipFolderPath)
             let header = {}
-            header['Content-Disposition'] = contentDisposition(zipName)
+            header['Content-Disposition'] = contentDisposition(zipFolderName)
             ctx.set(header)
             ctx.body = fs.createReadStream(absZipFolderPath)
         }catch (e) {
