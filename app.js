@@ -14,7 +14,7 @@ const api = require('./routes/apis')
 onerror(app)
 
 // middlewares
-// app.use(koaBody({}))
+app.use(koaBody({}))
 
 // app.use(koaBody({
 //     multipart:true,

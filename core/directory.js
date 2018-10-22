@@ -50,7 +50,8 @@ module.exports = {
         let isExist = await pathIsExist(folderAbsPath)
 
         if(isExist) {
-            return {msg:"该目录已存在",folderName:folderName,path:folderAbsPath}
+            throw new Error('目录已存在')
+            //return {msg:"该目录已存在",folderName:folderName,path:folderAbsPath}
         }
 
         try{
@@ -58,7 +59,8 @@ module.exports = {
             return {msg:"文件夹创建成功",folderName:folderName,path:folderAbsPath}
         }catch (e) {
             console.log("mkOneFolder",e)
-            return {msg:"文件夹创建失败",folderName:folderName,path:folderAbsPath}
+            throw new Error('文件夹创建失败')
+            // return {msg:"文件夹创建失败",folderName:folderName,path:folderAbsPath}
         }
     },
 
@@ -68,10 +70,12 @@ module.exports = {
         let isExist = await pathIsExist(folderAbsPath)
 
         if(!folderAbsPath.startsWith(storagePath)){
-            return {msg:"目录不合法",path:folderAbsPath}
+            // return {msg:"目录不合法",path:folderAbsPath}
+            throw new Error('目录不合法')
         }
         if(!isExist) {
-            return {msg:"该目录不存在",path:folderAbsPath}
+            // return {msg:"该目录不存在",path:folderAbsPath}
+            throw new Error('该目录不存在')
         }
 
         try{
@@ -80,7 +84,8 @@ module.exports = {
             return {msg:"文件夹删除成功",path:folderAbsPath}
         }catch (e) {
             console.log("delOneFolder",e)
-            return {msg:"文件夹删除失败",path:folderAbsPath}
+            // return {msg:"文件夹删除失败",path:folderAbsPath}
+            throw new Error('文件夹删除失败')
         }
     },
 

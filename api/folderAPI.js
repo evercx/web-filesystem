@@ -14,7 +14,12 @@ module.exports = {
         let folderName = ctx.request.body.folderName || "新建文件夹"
         let targetAbsDirPath = tools.getAbsPath(targetDirPath)
 
-        ctx.body = await mkFolder(targetAbsDirPath,folderName)
+        try{
+            ctx.body = await mkFolder(targetAbsDirPath,folderName)
+        }catch (e) {
+            ctx.status = 406
+        }
+        
         return
     },
 
@@ -25,7 +30,7 @@ module.exports = {
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
         if(folderPath === '/') {
-            ctx.status = 404
+            ctx.status = 406
             return
         }
 
@@ -80,11 +85,17 @@ module.exports = {
         }
         let absZipFolderPath = tools.getAbsPath(relZipFolderPath)
 
-        await archiveFolder(absFolderPath,folderName,absZipFolderPath)
-        let header = {}
-        header['Content-Disposition'] = contentDisposition(zipName)
-        ctx.set(header)
-        ctx.body = fs.createReadStream(absZipFolderPath)
+        try{
+            await archiveFolder(absFolderPath,folderName,absZipFolderPath)
+            let header = {}
+            header['Content-Disposition'] = contentDisposition(zipName)
+            ctx.set(header)
+            ctx.body = fs.createReadStream(absZipFolderPath)
+        }catch (e) {
+            console.log("archFolder",e)
+            ctx.status = 406
+        }
+
 
         return
     },

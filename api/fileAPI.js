@@ -16,9 +16,16 @@ module.exports = {
             return
         }
 
-        let fileAbsPath = tools.getAbsPath(filePath)
-        ctx.body = await delOneFile(fileAbsPath)
-        return
+        try{
+
+            let fileAbsPath = tools.getAbsPath(filePath)
+            ctx.body = await delOneFile(fileAbsPath)
+            return
+        }catch (e) {
+            console.log("deleteFile",e)
+            ctx.status = 404
+        }
+
     },
 
 
