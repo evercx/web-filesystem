@@ -1,8 +1,6 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('mz/fs')
 const archiver = require('archiver')
-const fsPromise = require('../lib/fsPromise')
-const tools = require('../lib/tools')
 const { pathIsExist } = require('../lib/tools')
 const {storagePath} = require('../storage.js')
 
@@ -18,13 +16,13 @@ module.exports = {
         if(isExist){
 
             try{
-                dirReadResult = await fsPromise.readdir(absDirPath)
+                dirReadResult = await fs.readdir(absDirPath)
 
                 for (item of dirReadResult) {
 
                     let itemInfo = {}
                     let itemPath = path.resolve(absDirPath,item)
-                    let itemStat = await fsPromise.stat(itemPath)
+                    let itemStat = await fs.stat(itemPath)
 
                     if (itemStat.isFile()) itemInfo.type = 'file'
                     else if(itemStat.isDirectory()) itemInfo.type = 'dir'
@@ -39,7 +37,7 @@ module.exports = {
             }
             return {msg:"success",dirInfo:dirInfo}
         }else {
-            throw new Error('dir does not exists')
+            throw new Error('目录不存在')
             //return {msg:"dir not exists",dirInfo:[]}
         }
     },
@@ -55,7 +53,7 @@ module.exports = {
         }
 
         try{
-            await fsPromise.mkdir(folderAbsPath)
+            await fs.mkdir(folderAbsPath)
             return {msg:"文件夹创建成功",folderName:folderName,path:folderAbsPath}
         }catch (e) {
             console.log("mkOneFolder",e)
@@ -80,7 +78,7 @@ module.exports = {
 
         try{
             await recEmptyFolder(folderAbsPath)
-            await fsPromise.rmdir(folderAbsPath)
+            await fs.rmdir(folderAbsPath)
             return {msg:"文件夹删除成功",path:folderAbsPath}
         }catch (e) {
             console.log("delOneFolder",e)
@@ -131,21 +129,22 @@ module.exports = {
 }
 
 
+// 递归清空给定文件夹中的子文件和文件夹
 let recEmptyFolder = async(absDirPath) => {
 
-    let dirInfo = await fsPromise.readdir(absDirPath)
+    let dirInfo = await fs.readdir(absDirPath)
     if (dirInfo.length === 0) return true;
 
     try{
         for (item of dirInfo){
 
             let itemPath = path.resolve(absDirPath,item)
-            let stat = await fsPromise.stat(itemPath)
+            let stat = await fs.stat(itemPath)
             if (stat.isDirectory()){
                 await recEmptyFolder(itemPath)
-                await fsPromise.rmdir(itemPath)
+                await fs.rmdir(itemPath)
             }else {
-                await fsPromise.unlink(itemPath)
+                await fs.unlink(itemPath)
             }
         }
     }catch (e) {

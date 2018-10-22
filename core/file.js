@@ -1,7 +1,7 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('mz/fs')
 const multiparty = require('multiparty')
-const fsPromise = require('../lib/fsPromise')
+// const fsPromise = require('../lib/fsPromise')
 const tools = require('../lib/tools')
 const { pathIsExist } = require('../lib/tools')
 const { storagePath } = require('../storage.js')
@@ -37,7 +37,7 @@ module.exports = {
         }
 
         try{
-            await fsPromise.unlink(fileAbsPath)
+            await fs.unlink(fileAbsPath)
             return {msg:"文件删除成功",path:fileAbsPath}
         }catch (e) {
             console.log("delOneFile",e)

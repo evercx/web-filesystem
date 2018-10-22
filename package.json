@@ -20,15 +20,18 @@
     "koa-convert": "^1.2.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^2.0.1",
-    "koa-onerror": "^1.2.1",
+    "koa-onerror": "^4.1.0",
     "koa-qs": "^2.0.0",
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "mocha": "^5.2.0",
     "multiparty": "^4.2.1",
+    "mz": "^2.7.0",
     "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
-    "nodemon": "^1.8.1"
+    "nodemon": "^1.8.1",
+    "should": "^13.2.3"
   }
 }

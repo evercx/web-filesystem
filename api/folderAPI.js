@@ -1,6 +1,5 @@
-const fs = require('fs')
+const fs = require('mz/fs')
 const contentDisposition = require('content-disposition')
-const path = require('path')
 const tools = require('../lib/tools')
 const {storageFolder} = require('../storage.js')
 const { mkFolder,delFolder,showDirInfo,archiveFolder } = require('../core/directory')
@@ -125,7 +124,6 @@ module.exports = {
             console.log("archFolder",e)
             ctx.status = 406
         }
-
 
         return
     },

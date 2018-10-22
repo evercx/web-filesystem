@@ -1,4 +1,3 @@
-const multiparty = require('multiparty')
 const contentDisposition = require('content-disposition')
 const tools = require('../lib/tools')
 const { delOneFile,getFileStream,uploadFileStream } = require('../core/file')
@@ -25,9 +24,7 @@ module.exports = {
             console.log("deleteFile",e)
             ctx.status = 404
         }
-
     },
-
 
     uploadFileStream: async (ctx,next) => {
 
