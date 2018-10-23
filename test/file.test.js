@@ -13,13 +13,13 @@ describe('delete one file' , () => {
     let fileName = 'testFile.txt'
     let filePath = path.resolve(dirPath,fileName)
 
-    before( async () => {
+    beforeEach( async () => {
         if ( ! await tools.pathIsExist(filePath)){
             await fs.writeFile(filePath,'balabala')
         }
     })
 
-    after( async () => {
+    afterEach( async () => {
         if (await tools.pathIsExist(filePath)){
             await fs.unlink(filePath)
         }
@@ -32,20 +32,12 @@ describe('delete one file' , () => {
 
     it('should not delete a file that does not exist', async() =>{
         let notExistFilePath = path.resolve(dirPath,'notExistFileName.txt')
-        try {
-            await delOneFile(notExistFilePath)
-        }catch (e) {
-            e.message.should.be.exactly('文件不存在')
-        }
+        delOneFile(notExistFilePath).should.rejectedWith('文件不存在')
     })
 
     it('should not delete a file with invalid path',async () =>{
         let invalidFilePath = "/ba/la/file.txt"
-        try{
-            await delOneFile(invalidFilePath)
-        }catch (e) {
-            e.message.should.be.exactly('文件地址不合法')
-        }
+        delOneFile(invalidFilePath).should.rejectedWith('文件地址不合法')
     })
 })
 
@@ -54,30 +46,27 @@ describe('get file stream',() => {
     let fileName = 'testFile.txt'
     let filePath = path.resolve(dirPath,fileName)
 
-    before( async () => {
+    beforeEach( async () => {
+
         if ( ! await tools.pathIsExist(filePath)){
             await fs.writeFile(filePath,'balabala')
         }
     })
 
-    after( async () => {
+    afterEach( async () => {
+
         if (await tools.pathIsExist(filePath)){
             await fs.unlink(filePath)
         }
     })
 
     it('should return a file readable stream',async () =>{
-
-        let result =  await getFileStream(filePath)
+        let result = await getFileStream(filePath)
         should(result).have.property('pipe')
     })
 
     it('should not return a file stream that does not exist',async ()=>{
         let notExistFilePath = path.resolve(dirPath,'notExistFileName.txt')
-        try {
-            await getFileStream(notExistFilePath)
-        }catch (e) {
-            e.message.should.be.exactly('文件不存在')
-        }
+        getFileStream(notExistFilePath).should.rejectedWith('文件不存在')
     })
 })

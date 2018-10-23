@@ -6,7 +6,6 @@ const onerror = require('koa-onerror')
 const logger = require('koa-logger')
 const koaBody = require('koa-body');
 
-const fsPromise = require('./lib/fsPromise.js')
 const index = require('./routes/index')
 const api = require('./routes/apis')
 

@@ -14,6 +14,8 @@ module.exports = {
         let folderName = ctx.request.body.folderName || "新建文件夹"
         let targetAbsDirPath = tools.getAbsPath(targetDirPath)
 
+        console.log({targetDirPath,folderName})
+
         try{
             ctx.body = await mkFolder(targetAbsDirPath,folderName)
         }catch (e) {

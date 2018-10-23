@@ -28,7 +28,8 @@
     "mocha": "^5.2.0",
     "multiparty": "^4.2.1",
     "mz": "^2.7.0",
-    "pug": "^2.0.0-rc.1"
+    "pug": "^2.0.0-rc.1",
+    "supertest": "^3.3.0"
   },
   "devDependencies": {
     "nodemon": "^1.8.1",

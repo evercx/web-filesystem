@@ -1,7 +1,6 @@
 const router = require('koa-router')()
 const path = require('path')
-
-const fsPromise = require('../lib/fsPromise.js')
+const fs = require('mz/fs')
 
 router.get('/*', async (ctx, next) => {
 
@@ -9,7 +8,7 @@ router.get('/*', async (ctx, next) => {
         let homePagePath = path.resolve('../','public/home_page.html');
         let html = ''
         try{
-            html = await fsPromise.readFile(homePagePath)
+            html = await fs.readFile(homePagePath)
         }catch (e) {
             console.log(e)
             html = 'HTTP-Internal Server Error'
