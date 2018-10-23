@@ -118,6 +118,43 @@ describe('show dir info',() =>{
     })
 })
 
+describe('archive a folder recursively', () => {
+
+    let dirPath = storagePath
+    let folderName = 'testDir'
+    let folderPath = path.resolve(dirPath,folderName)
+    let filePath = path.resolve(folderPath,'file.txt')
+    let absZipFolderPath = path.resolve(dirPath,folderName + '.zip')
+
+    beforeEach( async () => {
+
+        if( ! await tools.pathIsExist(folderPath)){
+            await fs.mkdir(folderPath)
+        }
+        if( ! await tools.pathIsExist(filePath)){
+            await fs.writeFile(filePath,'some string')
+        }
+    })
+
+    afterEach( async () => {
+
+        if(await tools.pathIsExist(folderPath)){
+            await delFolder(folderPath)
+        }
+        if(await tools.pathIsExist(absZipFolderPath)){
+            await fs.unlink(absZipFolderPath)
+        }
+    })
+
+    it('should make a zip file' ,async() =>{
+
+        let result = await archiveFolder(folderPath,absZipFolderPath)
+        result.should.have.property('msg','success')
+        result.should.have.property('zipPath',absZipFolderPath)
+    })
+})
+
+
 
 
 

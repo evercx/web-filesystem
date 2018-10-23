@@ -30,7 +30,7 @@ describe('delete one file' , () => {
         should(result).have.property('path',filePath)
     })
 
-    it('should not delete a file that does not exist', async() =>{
+    it('should not delete a file that does not exist', async () =>{
         let notExistFilePath = path.resolve(dirPath,'notExistFileName.txt')
         delOneFile(notExistFilePath).should.rejectedWith('文件不存在')
     })

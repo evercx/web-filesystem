@@ -76,8 +76,7 @@ module.exports = {
         }
     },
 
-    archiveFolder:async (absFolderPath,folderName,absZipFolderPath) => {
-
+    archiveFolder:async (absFolderPath,absZipFolderPath) => {
 
         let archive = archiver('zip',{ zlib:{level:9} })
         try{
@@ -94,7 +93,7 @@ module.exports = {
 
             outputStream.on('close',function(){
                 console.log(archive.pointer() + ' total bytes')
-                return resolve("success")
+                return resolve({msg:'success',zipPath:absZipFolderPath})
             })
 
             outputStream.on('end',function(){

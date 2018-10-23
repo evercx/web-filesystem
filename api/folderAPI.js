@@ -87,7 +87,7 @@ module.exports = {
         }
 
         try{
-            await archiveFolder(absFolderPath,folderName,absZipFolderPath)
+            await archiveFolder(absFolderPath,absZipFolderPath)
             let header = {}
             header['Content-Disposition'] = contentDisposition(zipFolderName)
             ctx.set(header)

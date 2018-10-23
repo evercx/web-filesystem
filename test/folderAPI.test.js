@@ -17,7 +17,6 @@ describe('request folderAPI',() => {
     describe('GET /api/info',() => {
 
         it('should return 200',(done) =>{
-
             request()
                 .get('/api/info')
                 .expect(200)
