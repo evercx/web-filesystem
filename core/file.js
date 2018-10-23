@@ -1,7 +1,5 @@
-const path = require('path')
 const fs = require('mz/fs')
 const multiparty = require('multiparty')
-// const fsPromise = require('../lib/fsPromise')
 const tools = require('../lib/tools')
 const { pathIsExist } = require('../lib/tools')
 const { storagePath } = require('../storage.js')
@@ -14,9 +12,7 @@ module.exports = {
         let isExist = await pathIsExist(absFilePath)
 
         if(isExist){
-
-            let readStream = fs.createReadStream(absFilePath)
-            return readStream
+            return fs.createReadStream(absFilePath)
         }else{
             throw new Error("文件不存在")
         }
@@ -24,15 +20,12 @@ module.exports = {
 
     delOneFile: async (fileAbsPath) => {
 
-        // let fileAbsPath = path.resolve(targetAbsDirPath,fileName)
         let isExist = await pathIsExist(fileAbsPath)
 
         if(!fileAbsPath.startsWith(storagePath)){
-            // return {msg:"文件地址不合法",path:fileAbsPath}
             throw new Error('文件地址不合法')
         }
         if(!isExist) {
-            // return {msg:"文件不存在",path:fileAbsPath}
             throw new Error('文件不存在')
         }
 
@@ -41,7 +34,6 @@ module.exports = {
             return {msg:"文件删除成功",path:fileAbsPath}
         }catch (e) {
             console.log("delOneFile",e)
-            // return {msg:"文件删除失败",path:fileAbsPath}
             throw new Error('文件删除失败')
         }
     },
@@ -78,6 +70,3 @@ module.exports = {
         })
     }
 }
-
-
-// module.exports.delOneFile('/Users/evercx/storage/t/','f.txt').then( r => console.log(r))

@@ -14,14 +14,11 @@ module.exports = {
         let folderName = ctx.request.body.folderName || "新建文件夹"
         let targetAbsDirPath = tools.getAbsPath(targetDirPath)
 
-        console.log({targetDirPath,folderName})
-
         try{
             ctx.body = await mkFolder(targetAbsDirPath,folderName)
         }catch (e) {
             ctx.status = 406
         }
-        
         return
     },
 
@@ -31,6 +28,7 @@ module.exports = {
 
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
+
         if(folderPath === '/') {
             ctx.status = 406
             return
@@ -38,7 +36,6 @@ module.exports = {
 
         let folderAbsPath = tools.getAbsPath(folderPath)
         ctx.body = await delFolder(folderAbsPath)
-
         return
     },
 
@@ -49,6 +46,7 @@ module.exports = {
         curDirPath = tools.safeDecodeURIComponent(curDirPath)
 
         let absDirPath = tools.getAbsPath(curDirPath)
+
         try{
             let InfoResult = await showDirInfo(absDirPath)
             ctx.body = InfoResult.dirInfo
@@ -81,40 +79,12 @@ module.exports = {
             }
             absZipFolderPath = tools.getAbsPath(relSavedPath + zipFolderName)
             absFolderPath = tools.getAbsPath(folderPath)
-
         }else {
             absFolderPath = tools.getAbsPath(folderPath)
             folderName = storageFolder
             zipFolderName = folderName + '.zip'
             absZipFolderPath = tools.getAbsPath(folderPath + zipFolderName)
         }
-
-        // console.log({absFolderPath,absZipFolderPath,folderName})
-
-
-
-        // folderPath = folderPath.substring(0,folderPath.length-1)    //去掉最后一个 /
-        //
-        // let index = folderPath.lastIndexOf('/')
-        // let relFolderPath = folderPath.substring(0,index+1)
-        // relFolderPath === '' ? relFolderPath = './' : relFolderPath
-        // let folderName = folderPath.substring(index+1,folderPath.length)
-        //
-        // let zipName = folderName + '.zip'
-        // let relZipFolderPath = ''
-        // let absFolderPath = ''
-        //
-        // // 如果当前目录是根目录
-        // if( relFolderPath === './' && folderName === '.'){
-        //     folderName = storageFolder
-        //     absFolderPath = tools.getAbsPath(relFolderPath)
-        //     relZipFolderPath = relFolderPath + storageFolder + '.zip'
-        //
-        // }else {
-        //     absFolderPath = tools.getAbsPath(relFolderPath + folderName)
-        //     relZipFolderPath = relFolderPath + zipName
-        // }
-        // let absZipFolderPath = tools.getAbsPath(relZipFolderPath)
 
         try{
             await archiveFolder(absFolderPath,folderName,absZipFolderPath)
@@ -126,7 +96,6 @@ module.exports = {
             console.log("archFolder",e)
             ctx.status = 406
         }
-
         return
     },
 }

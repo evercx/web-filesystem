@@ -10,13 +10,12 @@ module.exports = {
 
         filePath = tools.formatPath(filePath)
         filePath = tools.safeDecodeURIComponent(filePath)
+
         if(filePath === '/') {
             ctx.status = 404
             return
         }
-
         try{
-
             let fileAbsPath = tools.getAbsPath(filePath)
             ctx.body = await delOneFile(fileAbsPath)
             return
@@ -63,13 +62,10 @@ module.exports = {
             ctx.set(header)
             ctx.body = readStream
             return
-
         }catch (e) {
             console.log(e)
             ctx.status = 404
             return
         }
     }
-
-
 }

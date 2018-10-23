@@ -14,6 +14,4 @@ router.post('/folder', makeOneFolder)
 router.delete('/folder/*', deleteFolder)
 router.delete('/file/*', deleteFile)
 
-
-
 module.exports = router
