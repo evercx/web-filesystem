@@ -17,7 +17,7 @@ module.exports = {
         try{
             ctx.body = await mkFolder(targetAbsDirPath,folderName)
         }catch (e) {
-            ctx.status = 406
+            ctx.status = 404
         }
         return
     },
@@ -29,13 +29,19 @@ module.exports = {
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
 
-        if(folderPath === '/') {
-            ctx.status = 406
+        if(folderPath === './') {
+            ctx.status = 404
             return
         }
 
         let folderAbsPath = tools.getAbsPath(folderPath)
-        ctx.body = await delFolder(folderAbsPath)
+        try{
+            let result = await delFolder(folderAbsPath)
+            ctx.body = result
+        }catch (e) {
+            ctx.status = 404
+        }
+
         return
     },
 
@@ -93,8 +99,8 @@ module.exports = {
             ctx.set(header)
             ctx.body = fs.createReadStream(absZipFolderPath)
         }catch (e) {
-            console.log("archFolder",e)
-            ctx.status = 406
+            // console.log("archFolder",e)
+            ctx.status = 404
         }
         return
     },

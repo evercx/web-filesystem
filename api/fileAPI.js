@@ -20,14 +20,14 @@ module.exports = {
             ctx.body = await delOneFile(fileAbsPath)
             return
         }catch (e) {
-            console.log("deleteFile",e)
+            // console.log("deleteFile",e)
             ctx.status = 404
         }
     },
 
     uploadFileStream: async (ctx,next) => {
 
-        let uploadPath = tools.safeDecodeURIComponent(ctx.params['0'])
+        let uploadPath = tools.safeDecodeURIComponent(tools.formatPath(ctx.params['0']))
 
         try{
             await uploadFileStream(ctx.req,uploadPath)
@@ -63,7 +63,7 @@ module.exports = {
             ctx.body = readStream
             return
         }catch (e) {
-            console.log(e)
+            // console.log(e)
             ctx.status = 404
             return
         }

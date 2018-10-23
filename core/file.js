@@ -53,7 +53,6 @@ module.exports = {
             form.on('part', function(part) {
 
                 if (part.filename) {
-
                     let targetAbsPath = tools.getAbsPath(filePath + part.filename)
                     part.pipe(fs.createWriteStream(targetAbsPath))
                     part.resume();

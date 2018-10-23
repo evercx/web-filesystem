@@ -79,11 +79,16 @@ module.exports = {
     archiveFolder:async (absFolderPath,absZipFolderPath) => {
 
         let archive = archiver('zip',{ zlib:{level:9} })
-        try{
-            archive = await recArchiveFolder('/',absFolderPath,archive)     //递归遍历给定的文件夹下的所有子文件和子文件夹及其文件
-        }catch (e) {
-            throw new Error('压缩文件夹出错')
+        if (await pathIsExist(absFolderPath)){
+            try{
+                archive = await recArchiveFolder('/',absFolderPath,archive)     //递归遍历给定的文件夹下的所有子文件和子文件夹及其文件
+            }catch (e) {
+                throw new Error('压缩文件夹出错')
+            }
+        }else {
+            throw new Error("目录不存在")
         }
+
 
         let outputStream = fs.createWriteStream(absZipFolderPath)
         archive.pipe(outputStream)
@@ -92,7 +97,7 @@ module.exports = {
         return new Promise(function(resolve,reject){
 
             outputStream.on('close',function(){
-                console.log(archive.pointer() + ' total bytes')
+                // console.log(archive.pointer() + ' total bytes')
                 return resolve({msg:'success',zipPath:absZipFolderPath})
             })
 
