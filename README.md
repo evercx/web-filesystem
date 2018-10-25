@@ -20,7 +20,7 @@ curl http://127.0.0.1:7000
 
 ### Customization
 
-- The server listens on the port 7000 by default, if you want to set port by yourself, you can pass it when typing start command. 
+- The server listens on the port 7000 by default, you can pass it by yourself when typing start command.
 
 ```
 node bin/www 6666
