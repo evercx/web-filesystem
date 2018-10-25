@@ -1,51 +1,51 @@
 # web-filesystem
 a tiny file system web service
 
-### 开发环境
+### Dev Environment
 
 - Node.js v10.12.0
 - npm v6.4.1
 
-### 使用
+### Usage
 
-1. 利用 `git clone ` 命令来下载本项目代码
-2. 进入本项目根目录 如：`cd web-filesystem/`
-3. 执行 `npm install` 安装项目依赖环境包
-4. 执行 `npm start` 或 `node bin/www`  开始运行项目代码
+1. use  `git clone `  to download the project code.
+2. `cd web-filesystem/`
+3. use `npm install`  to install node_modules
+4. use `npm start`  or  `node bin/www`  to start the server
 
 
 ```bash
 curl http://127.0.0.1:7000
 ```
 
-### 自定义
+### Customization
 
-- 该项目默认端口号为本机的 7000 端口，若要自定义启动端口 可自行传参：
+- The server listens on the port 7000 by default, if you want to set port by yourself, you can pass it when typing start command. 
 
 ```
 node bin/www 6666
 ```
 
-- 本地存储文件夹默认为项目根目录下的`storage`文件夹，若要自定义文件夹可根据项目根目录下的`storage.js` 文件进行编辑
+- All the files and directories are storaged in the `storage` folder by default. You can change this path by editing the `storage.js` file.
 
-### 测试
+### Test
 
 ```bash
 cd test
 mocha ./*.test.js
 ```
 
-### 开发任务
+### Todo Task
 
-- [x] 文件夹以及文件预览
-- [x] 文件上传 ( stream 方式)
-- [x] 文件下载 ( stream 方式)
-- [x] 创建文件夹
-- [x] 删除文件夹
-- [x] 打包下载文件夹 ( 递归遍历文件)
-- [x] tools 模块功能 单元测试
-- [x] 文件模块功能 单元测试
-- [x] 文件夹模块功能 单元测试
-- [x] 文件请求模块  单元测试
-- [x] 文件夹请求模块 单元测试
+- [x] preview files and directories
+- [x] upload file ( using stream )
+- [x] download file ( using stream )
+- [x] make folder
+- [x] delete folder
+- [x] archive directory ( using recursive method)
+- [x] tools unit test
+- [x] file unit test
+- [x] directory unit test
+- [x] fileAPI unit test
+- [x] directoryAPI unit test
 
