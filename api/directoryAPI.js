@@ -3,7 +3,7 @@ const contentDisposition = require('content-disposition')
 const tools = require('../lib/tools')
 const {storageFolder} = require('../storage.js')
 const { mkFolder,delFolder,showDirInfo,archiveFolder } = require('../core/directory')
-
+const { SUCCESS,FAILED } = require('../lib/message')
 
 module.exports = {
 
@@ -17,7 +17,11 @@ module.exports = {
         try{
             ctx.body = await mkFolder(targetAbsDirPath,folderName)
         }catch (e) {
-            ctx.status = 404
+            if(e.message === FAILED.DIR_EXISTED){
+                ctx.throw(404,e.message)
+            }else {
+                ctx.throw(500,e.message)
+            }
         }
         return
     },
@@ -30,16 +34,19 @@ module.exports = {
         folderPath = tools.safeDecodeURIComponent(folderPath)
 
         if(folderPath === './') {
-            ctx.status = 404
+            ctx.throw(404,new Error('不能删除根目录'))
             return
         }
 
         let folderAbsPath = tools.getAbsPath(folderPath)
         try{
-            let result = await delFolder(folderAbsPath)
-            ctx.body = result
+            ctx.body = await delFolder(folderAbsPath)
         }catch (e) {
-            ctx.status = 404
+            if(e.message === FAILED.DIR_INVALID || e.message === FAILED.DIR_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else {
+                ctx.throw(500,e.message)
+            }
         }
 
         return
@@ -54,10 +61,13 @@ module.exports = {
         let absDirPath = tools.getAbsPath(curDirPath)
 
         try{
-            let InfoResult = await showDirInfo(absDirPath)
-            ctx.body = InfoResult.dirInfo
+            ctx.body = await showDirInfo(absDirPath)
         }catch (e) {
-            ctx.throw(404)
+            if(e.message === FAILED.DIR_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else{
+                ctx.throw(500,e.message)
+            }
         }
         return
     },
@@ -79,6 +89,7 @@ module.exports = {
             let folderNameIndex = folderPathSplit.length - 2
             folderName = folderPathSplit[folderNameIndex]
             zipFolderName = folderName + '.zip'
+
             let relSavedPath = './'
             for(let i =0; i < folderNameIndex;i++){
                 relSavedPath = relSavedPath + folderPathSplit[i] + '/'
@@ -99,8 +110,11 @@ module.exports = {
             ctx.set(header)
             ctx.body = fs.createReadStream(absZipFolderPath)
         }catch (e) {
-            // console.log("archFolder",e)
-            ctx.status = 404
+            if(e.message === FAILED.DIR_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else{
+                ctx.throw(500,e.message)
+            }
         }
         return
     },

@@ -39,7 +39,7 @@ let deleteDir = function(obj) {
             url: delUrl,
             type: "DELETE",
             success: function (data) {
-                alert(data.msg);
+                alert(data.message);
                 window.location.reload()
             }
         });
@@ -57,7 +57,7 @@ let deleteFile = function(obj) {
             url: delUrl,
             type: "DELETE",
             success: function (data) {
-                alert(data.msg);
+                alert(data.message);
                 window.location.reload()
             }
         });
@@ -78,9 +78,13 @@ $(function(){
         data:{curDirPath:currentPath},
         success:function(data){
 
+            console.log(data)
+
+            let dirInfo = data.result.dirInfo
+
             $('#fileList').empty()
             let appendStr = ''
-            for (item of data){
+            for (item of dirInfo){
                 appendStr += '<li>'
                 let itemPath = '/' + currentPath + encodeURIComponent(item.name)
 
@@ -119,7 +123,7 @@ $(function(){
                 //contentType: 'multipart/form-data; boundary=string',
                 processData: false,
                 success: function (data) {
-                    alert(data.msg);
+                    alert(data.message);
                     window.location.reload()
                 }
             });
@@ -142,7 +146,7 @@ $(function(){
                 data: JSON.stringify(postData),
                 contentType:'application/json',
                 success: function (data) {
-                    alert(data.msg);
+                    alert(data.message);
                     window.location.reload()
                 }
             });

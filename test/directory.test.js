@@ -5,7 +5,7 @@ const tools = require('../lib/tools')
 
 const { showDirInfo,mkFolder,delFolder,archiveFolder } = require('../core/directory')
 const { storagePath } = require('../storage.js')
-
+const { SUCCESS,FAILED } = require('../lib/message')
 
 describe('make one folder', () =>{
 
@@ -22,7 +22,8 @@ describe('make one folder', () =>{
 
     it('should create a folder named "testDir"', async() =>{
         let result = await mkFolder(dirPath,folderName)
-        should(result).have.property('folderName',folderName)
+        should(result).have.property('message',SUCCESS.MAKE_FOLDER)
+        // should(result).have.property('folderName',folderName)
     })
 })
 
@@ -45,7 +46,7 @@ describe('make an exist folder', () =>{
     })
 
     it('should not create an exist folder', async() =>{
-        mkFolder(dirPath,folderName).should.rejectedWith('目录已存在')
+        mkFolder(dirPath,folderName).should.rejectedWith(FAILED.DIR_EXISTED)
     })
 })
 
@@ -69,17 +70,17 @@ describe('delete one folder', () =>{
 
     it('should delete a folder named "testDir"', async() =>{
         let result = await delFolder(folderPath)
-        should(result).have.property('path',folderPath)
+        should(result).have.property('message',SUCCESS.DELETE_FOLDER)
     })
 
     it('should not delete a folder with invalid path', async() =>{
         let invalidFolderPath = '/ba/la/'
-        delFolder(invalidFolderPath).should.rejectedWith('目录不合法')
+        delFolder(invalidFolderPath).should.rejectedWith(FAILED.DIR_INVALID)
     })
 
     it('should not delete a folder that does not exist', async() =>{
         let folderPath = path.resolve(dirPath,'notExistDir')
-        delFolder(folderPath).should.rejectedWith('该目录不存在')
+        delFolder(folderPath).should.rejectedWith(FAILED.DIR_NOTEXIST)
     })
 })
 
@@ -109,12 +110,12 @@ describe('show dir info',() =>{
 
     it('should show a list of dir info', async() =>{
         let result = await showDirInfo(folderPath)
-        should(result).have.property('msg','success')
+        should(result).have.property('message',SUCCESS.GET_DIRINFO)
     })
 
     it('should not show a list of dir info that does not exist', async() =>{
         let folderPath = path.resolve(dirPath,'notExistDir')
-        showDirInfo(folderPath).should.rejectedWith('目录不存在')
+        showDirInfo(folderPath).should.rejectedWith(FAILED.DIR_NOTEXIST)
     })
 })
 
@@ -149,8 +150,7 @@ describe('archive a folder recursively', () => {
     it('should make a zip file' ,async() =>{
 
         let result = await archiveFolder(folderPath,absZipFolderPath)
-        result.should.have.property('msg','success')
-        result.should.have.property('zipPath',absZipFolderPath)
+        result.should.have.property('message',SUCCESS.ARCHIVE_FOLDER)
     })
 })
 

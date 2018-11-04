@@ -5,6 +5,7 @@ const tools = require('../lib/tools')
 
 const { getFileStream,delOneFile } = require('../core/file')
 const { storagePath } = require('../storage.js')
+const { SUCCESS,FAILED } = require('../lib/message')
 
 
 describe('delete one file' , () => {
@@ -27,17 +28,17 @@ describe('delete one file' , () => {
 
     it('should delete one file',async () => {
         let result = await delOneFile(filePath)
-        should(result).have.property('path',filePath)
+        should(result).have.property('message',SUCCESS.DELETE_FILE)
     })
 
     it('should not delete a file that does not exist', async () =>{
         let notExistFilePath = path.resolve(dirPath,'notExistFileName.txt')
-        delOneFile(notExistFilePath).should.rejectedWith('文件不存在')
+        delOneFile(notExistFilePath).should.rejectedWith(FAILED.FILE_NOTEXIST)
     })
 
     it('should not delete a file with invalid path',async () =>{
         let invalidFilePath = "/ba/la/file.txt"
-        delOneFile(invalidFilePath).should.rejectedWith('文件地址不合法')
+        delOneFile(invalidFilePath).should.rejectedWith(FAILED.FILE_INVALID)
     })
 })
 
@@ -67,6 +68,6 @@ describe('get file stream',() => {
 
     it('should not return a file stream that does not exist',async ()=>{
         let notExistFilePath = path.resolve(dirPath,'notExistFileName.txt')
-        getFileStream(notExistFilePath).should.rejectedWith('文件不存在')
+        getFileStream(notExistFilePath).should.rejectedWith(FAILED.FILE_NOTEXIST)
     })
 })

@@ -7,11 +7,11 @@ const app = require('../app')
 
 const { delFolder } = require('../core/directory')
 const { storagePath } = require('../storage.js')
+const { SUCCESS,FAILED } = require('../lib/message')
 
 function request(){
     return supertest(app.listen())
 }
-
 
 
 describe('GET /api/info',() => {
@@ -22,13 +22,14 @@ describe('GET /api/info',() => {
             .expect(200)
             .end((err,res) => {
                 if(err) return done(err)
-                should(res.body).be.a.Array()
+                should(res.body.result.dirInfo).be.a.Array()
+                should(res.body).have.property('message',SUCCESS.GET_DIRINFO)
                 done()
             })
     })
 
     let targetDirPath = './'
-    let folderName = 'balabalanotexists'
+    let folderName = 'notExistFolder'
     let folderAbsPath = tools.getAbsPath(targetDirPath+folderName)
 
     beforeEach( async() => {
@@ -77,12 +78,12 @@ describe('POST /api/folder', ()=> {
             .expect(200)
             .end((err,res) => {
                 if(err) return done(err)
-                should(res.body).have.property('msg','文件夹创建成功')
+                should(res.body).have.property('message',SUCCESS.MAKE_FOLDER)
                 done()
             })
     })
 
-    it('should return 404 because of a existing folder',(done) => {
+    it('should return 404 because of an existing folder',(done) => {
         request()
             .post('/api/folder')
             .set('Content-Type','application/json')
@@ -122,7 +123,7 @@ describe('DELETE /api/folder/*', () => {
             .expect(200)
             .end((err,res) => {
                 if(err) return done(err)
-                should(res.body).have.property('msg','文件夹删除成功')
+                should(res.body).have.property('message',SUCCESS.DELETE_FOLDER)
                 done()
             })
     })
@@ -181,12 +182,12 @@ describe('GET /api/archive/*', () => {
 
         request()
             .get('/api/archive/' + folderName)
-            .expect(200)
-            .end((err,res) => {
-                if(err) return done(err)
-                should(res.body).have.property('length')
-                done()
-            })
+            .expect(200,done)
+            // .end((err,res) => {
+            //     if(err) return done(err)
+            //     should(res.body).have.property('length')
+            //     done()
+            // })
     })
 
     it('should return 404 because of a folder that does not exist',(done) => {

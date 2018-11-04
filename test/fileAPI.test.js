@@ -5,6 +5,7 @@ const tools = require('../lib/tools')
 const app = require('../app')
 
 const { delFolder } = require('../core/directory')
+const { SUCCESS,FAILED } = require('../lib/message')
 
 function request(){
     return supertest(app.listen())
@@ -39,14 +40,18 @@ describe('GET /api/file/*', () => {
     })
 
     it('should return 200 and download a file',(done) => {
+        // request()
+        //     .get('/api/file/' + fileName)
+        //     .expect(200)
+        //     .end( (err,res) => {
+        //         if(err) return done(err)
+        //         should(res.body).have.property('length')
+        //         done()
+        //     })
+
         request()
             .get('/api/file/' + fileName)
-            .expect(200)
-            .end( (err,res) => {
-                if(err) return done(err)
-                should(res.body).have.property('length')
-                done()
-            })
+            .expect(200,done)
     })
 
     it('should return 404 because of a file that does not exist',(done) => {
@@ -89,7 +94,8 @@ describe('DELETE /api/file/*', () => {
             .expect(200)
             .end( (err,res) => {
                 if(err) return done(err)
-                should(res.body).have.property('path',fileAbsPath)
+                should(res.body).have.property('message',SUCCESS.DELETE_FILE)
+                should(res.body.result).have.property('path',fileAbsPath)
                 done()
             })
     })
@@ -137,7 +143,7 @@ describe('POST /api/upload/*', () => {
             .expect(200)
             .end( (err,res) => {
                 if(err) return done(err)
-                should(res.body).have.property('msg','上传成功')
+                should(res.body).have.property('message',SUCCESS.UPLOAD_FILE)
                 done()
             })
     })

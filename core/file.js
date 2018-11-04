@@ -3,9 +3,19 @@ const multiparty = require('multiparty')
 const tools = require('../lib/tools')
 const { pathIsExist } = require('../lib/tools')
 const { storagePath } = require('../storage.js')
-
+const { SUCCESS,FAILED } = require('../lib/message')
 
 module.exports = {
+
+    /**
+     * 函数功能简述
+     *
+     * 根据给定文件路径获取文件流
+     *
+     * @param    {string}  absFilePath    文件的绝对路径
+     * @returns  {object}
+     *
+     */
 
     getFileStream: async (absFilePath) => {
 
@@ -14,29 +24,54 @@ module.exports = {
         if(isExist){
             return fs.createReadStream(absFilePath)
         }else{
-            throw new Error("文件不存在")
+            throw new Error(FAILED.FILE_NOTEXIST)
         }
     },
+
+    /**
+     * 函数功能简述
+     *
+     * 根据给定文件路径删除文件
+     *
+     * @param    {string}  fileAbsPath    文件的绝对路径
+     * @returns  {object}
+     *
+     */
 
     delOneFile: async (fileAbsPath) => {
 
         let isExist = await pathIsExist(fileAbsPath)
 
         if(!fileAbsPath.startsWith(storagePath)){
-            throw new Error('文件地址不合法')
+            throw new Error(FAILED.FILE_INVALID)
         }
         if(!isExist) {
-            throw new Error('文件不存在')
+            throw new Error(FAILED.FILE_NOTEXIST)
         }
 
         try{
             await fs.unlink(fileAbsPath)
-            return {msg:"文件删除成功",path:fileAbsPath}
+            return {
+                message:SUCCESS.DELETE_FILE,
+                result:{path:fileAbsPath}
+            }
         }catch (e) {
             console.log("delOneFile",e)
-            throw new Error('文件删除失败')
+            throw new Error(FAILED.DELETE_FILE)
         }
     },
+
+
+    /**
+     * 函数功能简述
+     *
+     * 根据文件流写入本地磁盘
+     *
+     * @param    {object}  req            请求对象
+     * @param    {string}  filePath       文件的绝对路径
+     * @returns  {object}
+     *
+     */
 
     uploadFileStream: async(req,filePath) => {
 
@@ -64,7 +99,9 @@ module.exports = {
             });
 
             form.on('close', function() {
-                resolve('Upload completed!');
+                resolve({
+                    message:SUCCESS.UPLOAD_FILE
+                });
             });
         })
     }

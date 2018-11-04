@@ -1,6 +1,7 @@
 const contentDisposition = require('content-disposition')
 const tools = require('../lib/tools')
 const { delOneFile,getFileStream,uploadFileStream } = require('../core/file')
+const { SUCCESS,FAILED } = require('../lib/message')
 
 module.exports = {
 
@@ -12,7 +13,7 @@ module.exports = {
         filePath = tools.safeDecodeURIComponent(filePath)
 
         if(filePath === '/') {
-            ctx.status = 404
+            ctx.throw(404,new Error('不能删除根目录'))
             return
         }
         try{
@@ -20,8 +21,11 @@ module.exports = {
             ctx.body = await delOneFile(fileAbsPath)
             return
         }catch (e) {
-            // console.log("deleteFile",e)
-            ctx.status = 404
+            if(e.message === FAILED.FILE_INVALID || e.message === FAILED.FILE_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else {
+                ctx.throw(500,e.message)
+            }
         }
     },
 
@@ -30,10 +34,9 @@ module.exports = {
         let uploadPath = tools.safeDecodeURIComponent(tools.formatPath(ctx.params['0']))
 
         try{
-            await uploadFileStream(ctx.req,uploadPath)
-            ctx.body = {msg:"上传成功"}
+            ctx.body = await uploadFileStream(ctx.req,uploadPath)
         }catch (e) {
-            ctx.status = 500
+            ctx.throw(500,e.message)
         }
     },
 
@@ -45,11 +48,11 @@ module.exports = {
         filePath = tools.safeDecodeURIComponent(filePath)
 
         if(filePath === '/') {
-            ctx.status = 404
+            ctx.throw(404)
             return
         }
 
-        if (filePath.lastIndexOf('.') === -1) return 404
+        if (filePath.lastIndexOf('.') === -1) return ctx.throw(404,new Error('文件地址不合法'))
 
         try{
 
@@ -63,8 +66,7 @@ module.exports = {
             ctx.body = readStream
             return
         }catch (e) {
-            // console.log(e)
-            ctx.status = 404
+            ctx.throw(404,e.message)
             return
         }
     }
