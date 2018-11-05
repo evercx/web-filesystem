@@ -6,7 +6,7 @@ const tools = require('../lib/tools')
 const app = require('../app')
 
 const { delFolder } = require('../core/directory')
-const { storagePath } = require('../storage.js')
+const { storagePath,storageFolder } = require('../storage.js')
 const { SUCCESS,FAILED } = require('../lib/message')
 
 function request(){
@@ -156,6 +156,7 @@ describe('GET /api/archive/*', () => {
     let folderPath = path.resolve(dirPath,folderName)
     let filePath = path.resolve(folderPath,'file.txt')
     let absZipFolderPath = path.resolve(dirPath,folderName + '.zip')
+    let storagezipPath = path.resolve(dirPath,storageFolder +'.zip')
     let notExistFolderName = "notExistDir"
     let notExistFolderAbsPath = tools.getAbsPath(dirPath + notExistFolderName)
 
@@ -180,6 +181,9 @@ describe('GET /api/archive/*', () => {
         }
         if(await tools.pathIsExist(absZipFolderPath)){
             await fs.unlink(absZipFolderPath)
+        }
+        if(await tools.pathIsExist(storagezipPath)){
+            await fs.unlink(storagezipPath)
         }
     })
 

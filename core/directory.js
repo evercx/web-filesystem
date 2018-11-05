@@ -173,7 +173,7 @@ module.exports = {
 
             archive.on('warning',function(err){
                 if (err.code === 'ENOENT') {
-                    console.log(err)
+                    // console.log(err)
                     return reject(err)
                 } else {
                     return reject(err)

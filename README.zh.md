@@ -32,7 +32,7 @@ node bin/www 6666
 
 ```bash
 cd test
-mocha ./*.test.js
+npm run test
 ```
 
 ### 开发任务

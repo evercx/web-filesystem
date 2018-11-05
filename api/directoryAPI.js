@@ -33,8 +33,6 @@ module.exports = {
         folderPath = tools.formatPath(folderPath)
         folderPath = tools.safeDecodeURIComponent(folderPath)
 
-        console.log(ctx.params['0'])
-
         if(folderPath === './') {
             ctx.throw(404,new Error('不能删除根目录'))
         }
@@ -63,7 +61,6 @@ module.exports = {
         try{
             ctx.body = await showDirInfo(absDirPath)
         }catch (e) {
-            console.log("抛出异常：",e.message)
             if(e.message === FAILED.DIR_NOTEXIST){
                 ctx.throw(404,e.message)
             }else{
