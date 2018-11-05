@@ -208,7 +208,7 @@ let recEmptyFolder = async(absDirPath) => {
             }
         }
     }catch (e) {
-        console.log("recEmptyFolder",e)
+        // console.log("recEmptyFolder",e)
         return false
     }
     return true

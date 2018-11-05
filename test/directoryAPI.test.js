@@ -97,13 +97,16 @@ describe('DELETE /api/folder/*', () => {
 
     let targetDirPath = './'
     let folderName = 'testDir'
+    let subFolderName = 'subDir'
     let folderAbsPath = tools.getAbsPath(targetDirPath + folderName)
+    let subFolderAbsPath = path.resolve(folderAbsPath,subFolderName)
     let notExistFolderName = "notExistDir"
     let notExistFolderAbsPath = tools.getAbsPath(targetDirPath + notExistFolderName)
 
     beforeEach( async() => {
         if( ! await tools.pathIsExist(folderAbsPath)){
             await fs.mkdir(folderAbsPath)
+            await fs.mkdir(subFolderAbsPath)
         }
 
         if( await tools.pathIsExist(notExistFolderAbsPath)){
@@ -113,6 +116,7 @@ describe('DELETE /api/folder/*', () => {
 
     afterEach( async()=>{
         if(await tools.pathIsExist(folderAbsPath)){
+            await fs.rmdir(subFolderAbsPath)
             await fs.rmdir(folderAbsPath)
         }
     })
