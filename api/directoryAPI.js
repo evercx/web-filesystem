@@ -17,9 +17,12 @@ module.exports = {
         try{
             ctx.body = await mkFolder(targetAbsDirPath,folderName)
         }catch (e) {
+
+            /* istanbul ignore else */
             if(e.message === FAILED.DIR_EXISTED){
                 ctx.throw(404,e.message)
             }else {
+
                 ctx.throw(500,e.message)
             }
         }
@@ -41,6 +44,7 @@ module.exports = {
         try{
             ctx.body = await delFolder(folderAbsPath)
         }catch (e) {
+            /* istanbul ignore else */
             if(e.message === FAILED.DIR_INVALID || e.message === FAILED.DIR_NOTEXIST){
                 ctx.throw(404,e.message)
             }else {
@@ -61,6 +65,7 @@ module.exports = {
         try{
             ctx.body = await showDirInfo(absDirPath)
         }catch (e) {
+            /* istanbul ignore else */
             if(e.message === FAILED.DIR_NOTEXIST){
                 ctx.throw(404,e.message)
             }else{
@@ -90,6 +95,7 @@ module.exports = {
 
             let relSavedPath = './'
             for(let i =0; i < folderNameIndex;i++){
+                /* istanbul ignore next */
                 relSavedPath = relSavedPath + folderPathSplit[i] + '/'
             }
             absZipFolderPath = tools.getAbsPath(relSavedPath + zipFolderName)
@@ -102,12 +108,14 @@ module.exports = {
         }
 
         try{
-            await archiveFolder(absFolderPath,absZipFolderPath)
+            let archiveStream = await archiveFolder(absFolderPath,absZipFolderPath)
             let header = {}
             header['Content-Disposition'] = contentDisposition(zipFolderName)
             ctx.set(header)
-            ctx.body = fs.createReadStream(absZipFolderPath)
+            ctx.body = archiveStream
+            // ctx.body = fs.createReadStream(absZipFolderPath)
         }catch (e) {
+            /* istanbul ignore else */
             if(e.message === FAILED.DIR_NOTEXIST){
                 ctx.throw(404,e.message)
             }else{

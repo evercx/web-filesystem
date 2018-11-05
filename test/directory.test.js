@@ -150,7 +150,7 @@ describe('archive a folder recursively', () => {
     it('should make a zip file' ,async() =>{
 
         let result = await archiveFolder(folderPath,absZipFolderPath)
-        result.should.have.property('message',SUCCESS.ARCHIVE_FOLDER)
+        result.should.have.property('pipe')
     })
 })
 

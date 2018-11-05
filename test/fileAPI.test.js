@@ -56,7 +56,7 @@ describe('GET /api/file/*', () => {
             .expect(200)
             .end( (err,res) => {
                 if(err) return done(err)
-                should(res.body.toString()).be.equal(fileContent)
+                should(res.body).eql(Buffer.from(fileContent))
                 done()
             })
     })

@@ -20,6 +20,7 @@ module.exports = {
             ctx.body = await delOneFile(fileAbsPath)
             return
         }catch (e) {
+            /* istanbul ignore else */
             if(e.message === FAILED.FILE_INVALID || e.message === FAILED.FILE_NOTEXIST){
                 ctx.throw(404,e.message)
             }else {
@@ -35,6 +36,7 @@ module.exports = {
         try{
             ctx.body = await uploadFileStream(ctx.req,uploadPath)
         }catch (e) {
+            /* istanbul ignore next */
             ctx.throw(500,e.message)
         }
     },

@@ -56,7 +56,7 @@ module.exports = {
                 result:{path:fileAbsPath}
             }
         }catch (e) {
-            // console.log("delOneFile",e)
+            /* istanbul ignore next */
             throw new Error(FAILED.DELETE_FILE)
         }
     },
@@ -80,6 +80,7 @@ module.exports = {
 
         return new Promise(function(resolve, reject){
 
+            /* istanbul ignore next */
             form.on('error', function(err) {
                 console.log('Error parsing form: ' + err.stack);
                 reject(err.stack)
@@ -93,11 +94,13 @@ module.exports = {
                     part.resume();
                 }
 
+                /* istanbul ignore next */
                 part.on('error', function(err) {
                     reject(err.stack)
                 });
             });
 
+            /* istanbul ignore next */
             form.on('close', function() {
                 resolve({
                     message:SUCCESS.UPLOAD_FILE

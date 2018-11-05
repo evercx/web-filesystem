@@ -43,6 +43,7 @@ module.exports = {
             }catch (e) {
                 // console.log("GET_DIRINFO_ERROR",e)
                 // throw e
+                /* istanbul ignore next */
                 throw new Error(FAILED.GET_DIRINFO)
             }
             return {
@@ -87,6 +88,7 @@ module.exports = {
             }
         }catch (e) {
             // console.log("mkOneFolder",e)
+            /* istanbul ignore next */
             throw new Error(FAILED.MAKE_FOLDER)
         }
     },
@@ -122,6 +124,7 @@ module.exports = {
             }
         }catch (e) {
             // console.log("delOneFolder",e)
+            /* istanbul ignore next */
             throw new Error(FAILED.DELETE_FOLDER)
         }
     },
@@ -144,18 +147,19 @@ module.exports = {
             try{
                 archive = await recArchiveFolder('/',absFolderPath,archive)     //递归遍历给定的文件夹下的所有子文件和子文件夹及其文件
             }catch (e) {
+                /* istanbul ignore next */
                 throw new Error(FAILED.ARCHIVE_FOLDER)
             }
         }else {
             throw new Error(FAILED.DIR_NOTEXIST)
         }
 
-
-        let outputStream = fs.createWriteStream(absZipFolderPath)
-        archive.pipe(outputStream)
+        // let outputStream = fs.createWriteStream(absZipFolderPath)
+        // archive.pipe(outputStream)
         archive.finalize();
 
-        return new Promise(function(resolve,reject){
+        return archive
+/*        return new Promise(function(resolve,reject){
 
             outputStream.on('close',function(){
                 // console.log(archive.pointer() + ' total bytes')
@@ -167,10 +171,14 @@ module.exports = {
                 })
             })
 
+
+            /!* istanbul ignore next *!/
             outputStream.on('end',function(){
                 // console.log('Data has been drained');
             })
 
+
+            /!* istanbul ignore next *!/
             archive.on('warning',function(err){
                 if (err.code === 'ENOENT') {
                     // console.log(err)
@@ -180,11 +188,13 @@ module.exports = {
                 }
             })
 
+
+            /!* istanbul ignore next *!/
             archive.on('error', function(err) {
                 // throw err;
                 return reject(err)
             });
-        })
+        })*/
     }
 }
 
@@ -209,6 +219,7 @@ let recEmptyFolder = async(absDirPath) => {
         }
     }catch (e) {
         // console.log("recEmptyFolder",e)
+        /* istanbul ignore next */
         return false
     }
     return true
@@ -229,6 +240,7 @@ let recArchiveFolder = async(prefixPath,absDirPath,archive) => {
             return archive
         }
     }catch (e) {
+        /* istanbul ignore next */
         throw e
     }
     try{
@@ -245,6 +257,7 @@ let recArchiveFolder = async(prefixPath,absDirPath,archive) => {
             }
         }
     }catch (e) {
+        /* istanbul ignore next */
         throw e
     }
     return archive
