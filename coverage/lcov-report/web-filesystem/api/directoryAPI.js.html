@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for web-filesystem/api/directoryAPI.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">web-filesystem/api</a> directoryAPI.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">82.61% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>57/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>12/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">82.61% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>57/69</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const fs = require('mz/fs')
+const contentDisposition = require('content-disposition')
+const tools = require('../lib/tools')
+const {storageFolder} = require('../storage.js')
+const { mkFolder,delFolder,showDirInfo,archiveFolder } = require('../core/directory')
+const { SUCCESS,FAILED } = require('../lib/message')
+&nbsp;
+module.exports = {
+&nbsp;
+    // 创建文件夹, 由前端给定 相当路径 和 文件夹名称
+    makeOneFolder : async (ctx,next) =&gt; {
+&nbsp;
+        let targetDirPath = ctx.request.body.targetDirPath || <span class="branch-1 cbranch-no" title="branch not covered" >'.'</span>
+        let folderName = ctx.request.body.folderName || <span class="branch-1 cbranch-no" title="branch not covered" >"新建文件夹"</span>
+        let targetAbsDirPath = tools.getAbsPath(targetDirPath)
+&nbsp;
+        try{
+            ctx.body = await mkFolder(targetAbsDirPath,folderName)
+        }catch (e) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if(e.message === FAILED.DIR_EXISTED){
+                ctx.throw(404,e.message)
+            }else {
+<span class="cstat-no" title="statement not covered" >                ctx.throw(500,e.message)</span>
+            }
+        }
+        return
+    },
+&nbsp;
+    deleteFolder : async (ctx,next) =&gt; {
+&nbsp;
+        let folderPath = ctx.params['0']
+&nbsp;
+        folderPath = tools.formatPath(folderPath)
+        folderPath = tools.safeDecodeURIComponent(folderPath)
+&nbsp;
+        if(folderPath === './') {
+            ctx.throw(404,new Error('不能删除根目录'))
+<span class="cstat-no" title="statement not covered" >            return</span>
+        }
+&nbsp;
+        let folderAbsPath = tools.getAbsPath(folderPath)
+        try{
+            ctx.body = await delFolder(folderAbsPath)
+        }catch (e) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if(e.message === FAILED.DIR_INVALID || e.message === FAILED.DIR_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else {
+<span class="cstat-no" title="statement not covered" >                ctx.throw(500,e.message)</span>
+            }
+        }
+&nbsp;
+        return
+    },
+&nbsp;
+    // 获取文件夹下的文件以及文件夹信息, 由前端给定所要查询的相对路径地址
+    getFolderInfo : async (ctx,next) =&gt; {
+&nbsp;
+        let curDirPath = ctx.request.query.curDirPath || '.'
+        curDirPath = tools.safeDecodeURIComponent(curDirPath)
+&nbsp;
+        let absDirPath = tools.getAbsPath(curDirPath)
+&nbsp;
+        try{
+            ctx.body = await showDirInfo(absDirPath)
+        }catch (e) {
+<span class="cstat-no" title="statement not covered" >            if(e.message === FAILED.DIR_NOTEXIST){</span>
+<span class="cstat-no" title="statement not covered" >                ctx.throw(404,e.message)</span>
+            }else{
+<span class="cstat-no" title="statement not covered" >                ctx.throw(500,e.message)</span>
+            }
+        }
+        return
+    },
+&nbsp;
+    archFolder : async (ctx,next) =&gt; {
+&nbsp;
+        let folderPath = ctx.params['0']
+        folderPath = tools.formatPath(folderPath)
+        folderPath = tools.safeDecodeURIComponent(folderPath)
+&nbsp;
+        let absFolderPath = ''
+        let folderName = ''
+        let absZipFolderPath = ''
+        let zipFolderName = ''
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (folderPath !== './'){
+&nbsp;
+            let folderPathSplit = folderPath.split('/')
+            let folderNameIndex = folderPathSplit.length - 2
+            folderName = folderPathSplit[folderNameIndex]
+            zipFolderName = folderName + '.zip'
+&nbsp;
+            let relSavedPath = './'
+            for(let i =0; i &lt; folderNameIndex;i++){
+<span class="cstat-no" title="statement not covered" >                relSavedPath = relSavedPath + folderPathSplit[i] + '/'</span>
+            }
+            absZipFolderPath = tools.getAbsPath(relSavedPath + zipFolderName)
+            absFolderPath = tools.getAbsPath(folderPath)
+        }else {
+<span class="cstat-no" title="statement not covered" >            absFolderPath = tools.getAbsPath(folderPath)</span>
+<span class="cstat-no" title="statement not covered" >            folderName = storageFolder</span>
+<span class="cstat-no" title="statement not covered" >            zipFolderName = folderName + '.zip'</span>
+<span class="cstat-no" title="statement not covered" >            absZipFolderPath = tools.getAbsPath(folderPath + zipFolderName)</span>
+        }
+&nbsp;
+        try{
+            await archiveFolder(absFolderPath,absZipFolderPath)
+            let header = {}
+            header['Content-Disposition'] = contentDisposition(zipFolderName)
+            ctx.set(header)
+            ctx.body = fs.createReadStream(absZipFolderPath)
+        }catch (e) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if(e.message === FAILED.DIR_NOTEXIST){
+                ctx.throw(404,e.message)
+            }else{
+<span class="cstat-no" title="statement not covered" >                ctx.throw(500,e.message)</span>
+            }
+        }
+        return
+    },
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 05 2018 10:33:51 GMT+0800 (GMT+08:00)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

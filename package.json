@@ -6,7 +6,7 @@
     "start": "node bin/www",
     "dev": "./node_modules/.bin/nodemon bin/www",
     "prd": "pm2 start bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover _mocha -- --timeout 1000 --exit"
   },
   "dependencies": {
     "archiver": "^3.0.0",
@@ -25,14 +25,26 @@
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
-    "mocha": "^5.2.0",
     "multiparty": "^4.2.1",
     "mz": "^2.7.0",
     "pug": "^2.0.0-rc.1",
     "supertest": "^3.3.0"
   },
   "devDependencies": {
-    "nodemon": "^1.8.1",
+    "babel-register": "^6.26.0",
+    "cross-env": "^5.2.0",
+    "nyc": "^13.1.0",
     "should": "^13.2.3"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

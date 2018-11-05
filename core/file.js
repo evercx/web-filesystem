@@ -67,7 +67,7 @@ module.exports = {
      *
      * 根据文件流写入本地磁盘
      *
-     * @param    {object}  req            请求对象
+     * @param    {object}  req            HTTP请求流
      * @param    {string}  filePath       文件的绝对路径
      * @returns  {object}
      *
