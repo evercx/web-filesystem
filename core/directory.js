@@ -36,12 +36,14 @@ module.exports = {
 
                     if (itemStat.isFile()) itemInfo.type = 'file'
                     else if(itemStat.isDirectory()) itemInfo.type = 'dir'
-                    else itemInfo.type = 'other'
+                    // else itemInfo.type = 'other'
                     itemInfo.name = item
                     dirInfo.push(itemInfo)
                 }
             }catch (e) {
-                throw e
+                // console.log("GET_DIRINFO_ERROR",e)
+                // throw e
+                throw new Error(FAILED.GET_DIRINFO)
             }
             return {
                 message:SUCCESS.GET_DIRINFO,
@@ -84,7 +86,7 @@ module.exports = {
 
             }
         }catch (e) {
-            console.log("mkOneFolder",e)
+            // console.log("mkOneFolder",e)
             throw new Error(FAILED.MAKE_FOLDER)
         }
     },
@@ -119,7 +121,7 @@ module.exports = {
                 }
             }
         }catch (e) {
-            console.log("delOneFolder",e)
+            // console.log("delOneFolder",e)
             throw new Error(FAILED.DELETE_FOLDER)
         }
     },
@@ -220,11 +222,6 @@ let recArchiveFolder = async(prefixPath,absDirPath,archive) => {
     try{
         dirInfoList = await fs.readdir(absDirPath)
         if (dirInfoList.length === 0){
-
-            console.log({
-                prefixPath,
-                absDirPath
-            })
 
             archive.append('this is an empty file',{name:'.empty',prefix:prefixPath})
             // archive.append('',{name:'',prefix:prefixPath})

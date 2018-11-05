@@ -16,8 +16,11 @@ describe('GET /api/file/*', () => {
 
     let fileName = 'file.txt'
     let notExistFileName = 'notExistFile.txt'
+    let invalidFileName = 'invalidFile'
+
     let fileAbsPath = tools.getAbsPath('./' + fileName)
     let notExistFileAbsPath = tools.getAbsPath('./' + notExistFileName)
+    let invalidFileAbsPath = tools.getAbsPath('./' + invalidFileName)
 
     beforeEach( async() => {
 
@@ -26,6 +29,10 @@ describe('GET /api/file/*', () => {
         }
         if( await tools.pathIsExist(notExistFileAbsPath)){
             await fs.unlink(notExistFileAbsPath)
+        }
+
+        if( await tools.pathIsExist(invalidFileAbsPath)){
+            await fs.unlink(invalidFileAbsPath)
         }
     })
 
@@ -57,6 +64,18 @@ describe('GET /api/file/*', () => {
     it('should return 404 because of a file that does not exist',(done) => {
         request()
             .get('/api/file/' + notExistFileName)
+            .expect(404,done)
+    })
+
+    it('should return 404 because of a invalid file',(done) => {
+        request()
+            .get('/api/file/' + invalidFileName)
+            .expect(404,done)
+    })
+
+    it('should return 404 because requesting "/" ',(done) => {
+        request()
+            .get('/api/file/')
             .expect(404,done)
     })
 })
@@ -105,6 +124,13 @@ describe('DELETE /api/file/*', () => {
             .delete('/api/file/' + notExistFileName)
             .expect(404,done)
     })
+
+    it('should return 404 because of requesting "/"',(done) => {
+        request()
+            .delete('/api/file/')
+            .expect(404,done)
+    })
+
 })
 
 

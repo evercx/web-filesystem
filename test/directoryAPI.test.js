@@ -40,7 +40,8 @@ describe('GET /api/info',() => {
 
     it('should return 404',(done) =>{
         request()
-            .get('/api/info/'+folderName)
+            .get('/api/info/')
+            .query({curDirPath:folderName})
             .expect(404,done)
     })
 })
@@ -188,6 +189,13 @@ describe('GET /api/archive/*', () => {
             //     should(res.body).have.property('length')
             //     done()
             // })
+    })
+
+    it('should return 200 with "./" path and return a zip file',(done) => {
+
+        request()
+            .get('/api/archive/')
+            .expect(200,done)
     })
 
     it('should return 404 because of a folder that does not exist',(done) => {

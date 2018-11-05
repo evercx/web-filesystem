@@ -56,7 +56,7 @@ module.exports = {
                 result:{path:fileAbsPath}
             }
         }catch (e) {
-            console.log("delOneFile",e)
+            // console.log("delOneFile",e)
             throw new Error(FAILED.DELETE_FILE)
         }
     },

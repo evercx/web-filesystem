@@ -6,7 +6,7 @@
     "start": "node bin/www",
     "dev": "./node_modules/.bin/nodemon bin/www",
     "prd": "pm2 start bin/www",
-    "test": "istanbul cover _mocha -- --timeout 1000 --exit"
+    "test": "istanbul cover _mocha -- --timeout 5000 --exit"
   },
   "dependencies": {
     "archiver": "^3.0.0",

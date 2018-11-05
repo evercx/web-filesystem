@@ -12,9 +12,8 @@ module.exports = {
         filePath = tools.formatPath(filePath)
         filePath = tools.safeDecodeURIComponent(filePath)
 
-        if(filePath === '/') {
+        if(filePath === './') {
             ctx.throw(404,new Error('不能删除根目录'))
-            return
         }
         try{
             let fileAbsPath = tools.getAbsPath(filePath)
@@ -47,9 +46,8 @@ module.exports = {
         filePath = tools.formatPath(filePath)
         filePath = tools.safeDecodeURIComponent(filePath)
 
-        if(filePath === '/') {
+        if(filePath === './') {
             ctx.throw(404)
-            return
         }
 
         if (filePath.lastIndexOf('.') === -1) return ctx.throw(404,new Error('文件地址不合法'))
@@ -67,7 +65,6 @@ module.exports = {
             return
         }catch (e) {
             ctx.throw(404,e.message)
-            return
         }
     }
 }
