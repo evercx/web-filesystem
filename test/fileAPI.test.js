@@ -1,4 +1,6 @@
 const supertest = require('supertest')
+const contentDisposition = require('content-disposition')
+const path = require('path')
 const should = require('should')
 const fs = require('mz/fs')
 const tools = require('../lib/tools')
@@ -15,6 +17,7 @@ function request(){
 describe('GET /api/file/*', () => {
 
     let fileName = 'file.txt'
+    let fileContent = 'some string'
     let notExistFileName = 'notExistFile.txt'
     let invalidFileName = 'invalidFile'
 
@@ -25,7 +28,7 @@ describe('GET /api/file/*', () => {
     beforeEach( async() => {
 
         if( ! await tools.pathIsExist(fileAbsPath)){
-            await fs.writeFile(fileAbsPath,'some string')
+            await fs.writeFile(fileAbsPath,fileContent)
         }
         if( await tools.pathIsExist(notExistFileAbsPath)){
             await fs.unlink(notExistFileAbsPath)
@@ -47,18 +50,15 @@ describe('GET /api/file/*', () => {
     })
 
     it('should return 200 and download a file',(done) => {
-        // request()
-        //     .get('/api/file/' + fileName)
-        //     .expect(200)
-        //     .end( (err,res) => {
-        //         if(err) return done(err)
-        //         should(res.body).have.property('length')
-        //         done()
-        //     })
-
         request()
             .get('/api/file/' + fileName)
-            .expect(200,done)
+            .expect('Content-Disposition',contentDisposition(fileName))
+            .expect(200)
+            .end( (err,res) => {
+                if(err) return done(err)
+                should(res.body.toString()).be.equal(fileContent)
+                done()
+            })
     })
 
     it('should return 404 because of a file that does not exist',(done) => {

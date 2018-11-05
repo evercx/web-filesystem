@@ -1,4 +1,5 @@
 const supertest = require('supertest')
+const contentDisposition = require('content-disposition')
 const should = require('should')
 const path = require('path')
 const fs = require('mz/fs')
@@ -153,10 +154,12 @@ describe('GET /api/archive/*', () => {
 
     let dirPath = storagePath
     let folderName = 'testDir'
+    let zipName = folderName + '.zip'
     let folderPath = path.resolve(dirPath,folderName)
     let filePath = path.resolve(folderPath,'file.txt')
-    let absZipFolderPath = path.resolve(dirPath,folderName + '.zip')
-    let storagezipPath = path.resolve(dirPath,storageFolder +'.zip')
+    let absZipFolderPath = path.resolve(dirPath,zipName)
+    let storageZipName = storageFolder +'.zip'
+    let storageZipPath = path.resolve(dirPath,storageZipName)
     let notExistFolderName = "notExistDir"
     let notExistFolderAbsPath = tools.getAbsPath(dirPath + notExistFolderName)
 
@@ -182,8 +185,8 @@ describe('GET /api/archive/*', () => {
         if(await tools.pathIsExist(absZipFolderPath)){
             await fs.unlink(absZipFolderPath)
         }
-        if(await tools.pathIsExist(storagezipPath)){
-            await fs.unlink(storagezipPath)
+        if(await tools.pathIsExist(storageZipPath)){
+            await fs.unlink(storageZipPath)
         }
     })
 
@@ -191,6 +194,7 @@ describe('GET /api/archive/*', () => {
 
         request()
             .get('/api/archive/' + folderName)
+            .expect('Content-Disposition',contentDisposition(zipName))
             .expect(200,done)
             // .end((err,res) => {
             //     if(err) return done(err)
@@ -203,6 +207,7 @@ describe('GET /api/archive/*', () => {
 
         request()
             .get('/api/archive/')
+            .expect('Content-Disposition',contentDisposition(storageZipName))
             .expect(200,done)
     })
 
