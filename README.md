@@ -48,4 +48,6 @@ npm run test
 - [x] directory unit test
 - [x] fileAPI unit test
 - [x] directoryAPI unit test
+- []  chunk file upload
+- []  chunk file download
 

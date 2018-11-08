@@ -70,7 +70,6 @@ $(function(){
     let currentPath = getUrlRelativePath()
 
 
-
     $.ajax({
         url:'/api/info',
         method:'GET',
@@ -112,6 +111,7 @@ $(function(){
         if(c){
 
             let formData = new FormData($("#fileinfo")[0]);
+            console.log()
             let currentPath = encodeURIComponent(getUrlRelativePath())
             let url = '/api/upload/' + currentPath
 
@@ -168,6 +168,24 @@ $(function(){
         // })
         window.location.href = url
 
+    })
+
+
+    $("#uploadBigFileBtn").click(function(){
+        let c = confirm("Sure?")
+        if(c){
+
+            let f = $("#input-file")[0].files[0]
+            console.log(f.slice(0,1024*1024*20))
+
+
+
+
+
+
+
+
+        }
     })
 
 

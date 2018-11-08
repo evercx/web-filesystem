@@ -4,6 +4,7 @@ const archiver = require('archiver')
 const { pathIsExist } = require('../lib/tools')
 const { storagePath } = require('../storage.js')
 const { SUCCESS,FAILED } = require('../lib/message')
+const config = require('../config/config')
 
 module.exports = {
 
