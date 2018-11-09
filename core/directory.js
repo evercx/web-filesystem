@@ -2,7 +2,8 @@ const path = require('path')
 const fs = require('mz/fs')
 const archiver = require('archiver')
 const { pathIsExist } = require('../lib/tools')
-const { storagePath } = require('../storage.js')
+const {parseFileMeta} = require('./chunks')
+const { storagePath,chunkStoragePath } = require('../storage.js')
 const { SUCCESS,FAILED } = require('../lib/message')
 const config = require('../config/config')
 
@@ -35,10 +36,24 @@ module.exports = {
                     let itemPath = path.resolve(absDirPath,item)
                     let itemStat = await fs.stat(itemPath)
 
-                    if (itemStat.isFile()) itemInfo.type = 'file'
-                    else if(itemStat.isDirectory()) itemInfo.type = 'dir'
+                    if (itemStat.isFile()) {
+
+                        if(item.indexOf('.chunkinfo') !== -1){
+                            let fileMeta = await parseFileMeta(itemPath)
+                            itemInfo.type = 'chunk'
+                            itemInfo.name = fileMeta.fileName
+                            itemInfo.fileMd5Value = fileMeta.fileMd5Value
+                        }else {
+                            itemInfo.type = 'file'
+                            itemInfo.name = item
+                        }
+                    }
+                    else if(itemStat.isDirectory()) {
+                        itemInfo.type = 'dir'
+                        itemInfo.name = item
+                    }
                     // else itemInfo.type = 'other'
-                    itemInfo.name = item
+
                     dirInfo.push(itemInfo)
                 }
             }catch (e) {
@@ -108,7 +123,7 @@ module.exports = {
 
         let isExist = await pathIsExist(folderAbsPath)
 
-        if(!folderAbsPath.startsWith(storagePath)){
+        if(!folderAbsPath.startsWith(storagePath) && !folderAbsPath.startsWith(chunkStoragePath)){
             throw new Error(FAILED.DIR_INVALID)
         }
         if(!isExist) {
