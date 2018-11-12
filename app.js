@@ -29,4 +29,18 @@ app.use(require('koa-static')(__dirname + '/public'))
 // routes
 app.use(api.routes(), api.allowedMethods())
 app.use(index.routes(), index.allowedMethods())
+
+
+app.on('error',(err,ctx) => {
+
+    if(err.code === 'EPIPE'){
+        ctx.res.destroy()
+        console.log('app error',err)
+        return
+    }
+
+
+})
+
+
 module.exports = app

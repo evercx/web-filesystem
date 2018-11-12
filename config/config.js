@@ -2,5 +2,5 @@
 
 module.exports = {
 
-    CHUNK_SIZE: 20 * 1024 * 1024
+    CHUNK_SIZE: 10 * 1024 * 1024
 }

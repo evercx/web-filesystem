@@ -8,14 +8,14 @@ router.prefix('/api')
 
 router.get('/info', getFolderInfo)
 router.get('/file/*', downloadFile)
-router.get('/file/chunk/:fileMd5',downloadChunkFile)
+router.get('/chunk/file/*',downloadChunkFile)
 router.get('/archive/*', archFolder)
-router.post('/chunk/upload/*',uploadChunk)
 router.post('/upload/*', uploadFileStream)
+router.post('/chunk/upload/*',uploadChunk)
 router.post('/chunk/*',createChunkInfo)
 router.post('/folder', makeOneFolder)
 router.delete('/folder/*', deleteFolder)
 router.delete('/file/*', deleteFile)
-router.delete('/chunk/*', deleteChunkFile)
+router.delete('/chunk/file/*', deleteChunkFile)
 
 module.exports = router

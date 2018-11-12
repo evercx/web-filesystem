@@ -38,7 +38,7 @@ module.exports = {
 
                     if (itemStat.isFile()) {
 
-                        if(item.indexOf('.chunkinfo') !== -1){
+                        if(item.indexOf('.cinfo') !== -1){
                             let fileMeta = await parseFileMeta(itemPath)
                             itemInfo.type = 'chunk'
                             itemInfo.name = fileMeta.fileName

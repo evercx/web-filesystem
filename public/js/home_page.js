@@ -1,6 +1,6 @@
 
 
- const chunkSize = 20 * 1024 * 1024
+const chunkSize = 10 * 1024 * 1024
 
 
 function getUrlRelativePath() {
@@ -72,7 +72,7 @@ let deleteFile = function(obj) {
  let deleteChunkFile = function(obj) {
 
      let currentPath = getUrlRelativePath()
-     let delUrl = '/api/chunk/' + currentPath + '?fileMd5=' + obj.value
+     let delUrl = '/api/chunk/file/' + currentPath + '?fileMd5=' + obj.value
 
      let c = confirm("Sure?")
      if(c){
@@ -162,6 +162,36 @@ let deleteFile = function(obj) {
      })
  }
 
+ function finalRequestChunk(fileMeta) {
+
+     let currentPath = encodeURIComponent(getUrlRelativePath())
+     let url = '/api/chunk/upload/' + currentPath + "?fileMd5=" + fileMeta.fileMd5Value
+     return new Promise((resolve, reject) => {
+         // //构造一个表单，FormData是HTML5新增的
+         // let end = (i + 1) * fileMeta.chunkSize >= file.size ? file.size : (i + 1) * fileMeta.chunkSize
+         // let form = new FormData()
+         // let piece = file.slice(i * fileMeta.chunkSize, end)
+         // form.append("data", piece) //file对象的slice方法用于切出文件的一部分
+         //
+         // form.append("total", fileMeta.chunks) //总片数
+         // form.append("index", i) //当前是第几片
+         // form.append("fileMd5Value", fileMeta.fileMd5Value)
+
+         $.ajax({
+             url: url,
+             type: "POST",
+             // data: form, //刚刚构建的form数据对象
+             // async: true, //异步
+             // processData: false, //很重要，告诉jquery不要对form进行处理
+             // contentType: false, //很重要，指定为false才能形成正确的Content-Type
+             success: function (data) {
+                 console.log("success",data)
+                 resolve(data)
+             }
+         })
+     })
+ }
+
 
  function createChunkInfo(file,fileMd5Value){
 
@@ -225,7 +255,7 @@ $(function(){
                     appendStr += '<a href='+downloadUrl+'>' + item.name + '</a>'
                     appendStr += '&nbsp;&nbsp;&nbsp;<button  class="btn btn-danger" onclick=deleteFile(this) value='+encodedName+'>' + '删除文件' + '</button>'
                 }else if (item.type === 'chunk'){
-                    let downloadUrl = '/api/file/chunk/' + item.fileMd5Value
+                    let downloadUrl = '/api/chunk/file/' + currentPath +  '?fileMd5=' + item.fileMd5Value
                     appendStr += '<a href='+downloadUrl+'>' + item.name + '</a>'
                     appendStr += '&nbsp;&nbsp;&nbsp;<button  class="btn btn-danger" onclick=deleteChunkFile(this) value='+item.fileMd5Value+'>' + '删除文件' + '</button>'
                 }
@@ -306,20 +336,19 @@ $(function(){
         if(c){
             let file = $("#input-file")[0].files[0]
             let fileMd5Value = await md5File(file)
-            let {result} = await createChunkInfo(file,fileMd5Value)
-            let fileMeta = result.fileMeta
+            let data = await createChunkInfo(file,fileMd5Value)
+            let fileMeta = data.result.fileMeta
+
+            console.log(data)
 
             if( fileMeta.uploadedChunks.length === fileMeta.chunks){
                 alert("文件上传完毕")
                 return
             }
 
-            console.log(fileMeta.chunks)
-
             for(let i = 0;i < fileMeta.chunks;i++){
 
-                console.log(`第${i}次循环`,i)
-
+                // console.log(`第${i}次循环`,i)
                 let exist = fileMeta.uploadedChunks.indexOf(i) > -1
 
                 if(!exist){
@@ -328,13 +357,8 @@ $(function(){
                 }
             }
 
-            alert("文件上传完毕!")
-
-
-
-
-
-
+            let result = await finalRequestChunk(fileMeta)
+            alert(result.message)
         }
     })
 
